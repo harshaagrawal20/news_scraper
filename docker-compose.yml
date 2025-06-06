@@ -1,0 +1,52 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://backend:5000
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - AIRTABLE_API_KEY=${AIRTABLE_API_KEY}
+      - AIRTABLE_BASE_ID=${AIRTABLE_BASE_ID}
+      - AIRTABLE_GRID=abc
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: node src/index.js
+
+  n8n:
+    image: n8nio/n8n:latest
+    ports:
+      - "5679:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - N8N_USER_MANAGEMENT_DISABLED=true
+      - AIRTABLE_API_KEY=${AIRTABLE_API_KEY}
+      - AIRTABLE_BASE_ID=${AIRTABLE_BASE_ID}
+      - AIRTABLE_GRID=abc
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_DIAGNOSTICS_CONFIG_ENABLED=false
+      - N8N_METRICS=false
+      - NODE_ENV=production
+    volumes:
+      - ./n8n:/home/node/.n8n
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3 
+        
