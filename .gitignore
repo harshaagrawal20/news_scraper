@@ -1,3 +1,17 @@
-.env/
-.node_modules/
-._pycaches_/
+# Node.js dependencies
+node_modules/
+
+# Python cache
+__pycache__/
+
+# Environment variable files
+.env
+
+# MacOS hidden files (optional)
+.DS_Store
+
+# VS Code settings (optional)
+.vscode/
+
+# Logs (optional)
+*.log
