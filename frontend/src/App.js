@@ -73,10 +73,10 @@ function App() {
                   <p><strong>Investment News:</strong> {item.content}</p>
                 )}
                 {item.investment_location && (
-                  <p><strong></strong> {item.nvestment_location}</p>
+                  <p><strong>Investment Location:</strong> {item.investment_location}</p>
                 )}
                 {websiteLinks && (
-                  <p><strong></strong> {websiteLinks}</p>
+                  <p><strong>Website:</strong> {websiteLinks}</p>
                 )}
               </article>
             );
