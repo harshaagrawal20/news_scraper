@@ -9,8 +9,18 @@ function App() {
 
   useEffect(() => {
     const fetchNews = async () => {
+      const apiUrl = process.env.REACT_APP_API_URL;
+
+      console.log('API URL:', apiUrl); // Debug: check if API URL is loaded
+
+      if (!apiUrl) {
+        setError("API URL is not defined. Please check your .env file and restart the server.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}`);
+        const response = await axios.get(apiUrl);
         console.log('Fetched data:', response.data);
 
         let result = response.data;
@@ -76,7 +86,7 @@ function App() {
                   <p><strong>Investment Location:</strong> {item.investment_location}</p>
                 )}
                 {websiteLinks && (
-                  <p><strong>Website:</strong> {websiteLinks}</p>
+                  <p><strong>--</strong> {websiteLinks}</p>
                 )}
               </article>
             );
